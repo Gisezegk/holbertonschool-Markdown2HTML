@@ -2,7 +2,25 @@
 
 import sys
 import os
-import markdown
+import re
+
+
+def convert_markdown_to_html(markdown_text):
+    html_lines = []
+
+    heading_pattern = re.compile(r'^(#{1,6})\s*(.*)')
+
+    for line in markdown_text.splitlines():
+        match = heading_pattern.match(line)
+        if match:
+            level = len(match.group(1))
+            content = match.group(2).strip()
+            html_lines.append(f"<h{level}>{content}</h{level}>")
+        else:
+            html_lines.append(line)
+
+    return "\n".join(html_lines)
+
 
 def main():
     if len(sys.argv) != 3:
